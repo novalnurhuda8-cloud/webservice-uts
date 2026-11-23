@@ -1,0 +1,1671 @@
+{
+  "info": {
+    "name": "LabGear API",
+    "description": "UTS Web Service - LabGear API (NestJS). Jalankan server dengan npm run start:dev, lalu Run collection.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "1. Skenario Valid (positif)",
+      "item": [
+        {
+          "name": "Create Equipment - valid",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 201', function () { pm.response.to.have.status(201); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/equipment",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "equipment"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"assetCode\": \"LAB-MM-305\",\n  \"name\": \"Proyektor Epson EB-X06\",\n  \"category\": \"MULTIMEDIA\",\n  \"condition\": \"GOOD\",\n  \"stock\": 5,\n  \"location\": \"Lab Multimedia\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Create Loan Request - valid",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 201', function () { pm.response.to.have.status(201); });",
+                  "pm.test('status dan createdAt dibuat sistem', function () { var d = pm.response.json().data; pm.expect(d.status).to.eql('PENDING'); pm.expect(d.createdAt).to.be.a('string'); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/loan-requests",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "loan-requests"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"borrowerNim\": \"240414004\",\n  \"borrowerName\": \"Noval Nurhuda Wiratama\",\n  \"borrowerEmail\": \"240414004@fellow.lpkia.ac.id\",\n  \"assetCode\": \"LAB-MM-305\",\n  \"quantity\": 2,\n  \"startDate\": \"2026-11-25\",\n  \"returnDate\": \"2026-11-28\",\n  \"purpose\": \"Presentasi tugas kelompok mata kuliah multimedia di ruang kelas\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "List Equipment - filter dan paging",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200', function () { pm.response.to.have.status(200); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/equipment?category=MULTIMEDIA&keyword=proyektor&page=1&limit=10",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "equipment"
+              ],
+              "query": [
+                {
+                  "key": "category",
+                  "value": "MULTIMEDIA"
+                },
+                {
+                  "key": "keyword",
+                  "value": "proyektor"
+                },
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "10"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "List Equipment - tanpa query (default)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200', function () { pm.response.to.have.status(200); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/equipment",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "equipment"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Detail Equipment",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200', function () { pm.response.to.have.status(200); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/equipment/1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "equipment",
+                "1"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Detail Loan Request",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200', function () { pm.response.to.have.status(200); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/loan-requests/1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "loan-requests",
+                "1"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Patch Equipment - sebagian field",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200', function () { pm.response.to.have.status(200); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/equipment/1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "equipment",
+                "1"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"stock\": 10,\n  \"condition\": \"MINOR_DAMAGE\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Patch Loan Request - returnDate dan purpose",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200', function () { pm.response.to.have.status(200); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/loan-requests/1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "loan-requests",
+                "1"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"returnDate\": \"2026-11-30\",\n  \"purpose\": \"Perpanjangan presentasi tugas akhir mata kuliah multimedia\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "2. Pola Regex tidak sesuai",
+      "item": [
+        {
+          "name": "Equipment - assetCode salah pola",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 400', function () { pm.response.to.have.status(400); });",
+                  "pm.test('Pesan memuat: assetCode', function () { pm.expect(JSON.stringify(pm.response.json().message)).to.include('assetCode'); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/equipment",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "equipment"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"assetCode\": \"lab-mm-5\",\n  \"name\": \"Proyektor Epson EB-X06\",\n  \"category\": \"MULTIMEDIA\",\n  \"condition\": \"GOOD\",\n  \"stock\": 5,\n  \"location\": \"Lab Multimedia\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Loan - assetCode salah pola",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 400', function () { pm.response.to.have.status(400); });",
+                  "pm.test('Pesan memuat: assetCode', function () { pm.expect(JSON.stringify(pm.response.json().message)).to.include('assetCode'); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/loan-requests",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "loan-requests"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"borrowerNim\": \"240414004\",\n  \"borrowerName\": \"Noval Nurhuda Wiratama\",\n  \"borrowerEmail\": \"240414004@fellow.lpkia.ac.id\",\n  \"assetCode\": \"LAB-M-305\",\n  \"quantity\": 2,\n  \"startDate\": \"2026-11-25\",\n  \"returnDate\": \"2026-11-28\",\n  \"purpose\": \"Presentasi tugas kelompok mata kuliah multimedia di ruang kelas\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Loan - NIM berisi huruf",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 400', function () { pm.response.to.have.status(400); });",
+                  "pm.test('Pesan memuat: borrowerNim', function () { pm.expect(JSON.stringify(pm.response.json().message)).to.include('borrowerNim'); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/loan-requests",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "loan-requests"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"borrowerNim\": \"24041ABC4\",\n  \"borrowerName\": \"Noval Nurhuda Wiratama\",\n  \"borrowerEmail\": \"240414004@fellow.lpkia.ac.id\",\n  \"assetCode\": \"LAB-MM-305\",\n  \"quantity\": 2,\n  \"startDate\": \"2026-11-25\",\n  \"returnDate\": \"2026-11-28\",\n  \"purpose\": \"Presentasi tugas kelompok mata kuliah multimedia di ruang kelas\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Loan - NIM terlalu pendek (kurang dari 8)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 400', function () { pm.response.to.have.status(400); });",
+                  "pm.test('Pesan memuat: borrowerNim', function () { pm.expect(JSON.stringify(pm.response.json().message)).to.include('borrowerNim'); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/loan-requests",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "loan-requests"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"borrowerNim\": \"2404140\",\n  \"borrowerName\": \"Noval Nurhuda Wiratama\",\n  \"borrowerEmail\": \"240414004@fellow.lpkia.ac.id\",\n  \"assetCode\": \"LAB-MM-305\",\n  \"quantity\": 2,\n  \"startDate\": \"2026-11-25\",\n  \"returnDate\": \"2026-11-28\",\n  \"purpose\": \"Presentasi tugas kelompok mata kuliah multimedia di ruang kelas\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Loan - NIM terlalu panjang (lebih dari 12)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 400', function () { pm.response.to.have.status(400); });",
+                  "pm.test('Pesan memuat: borrowerNim', function () { pm.expect(JSON.stringify(pm.response.json().message)).to.include('borrowerNim'); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/loan-requests",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "loan-requests"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"borrowerNim\": \"2404140040000\",\n  \"borrowerName\": \"Noval Nurhuda Wiratama\",\n  \"borrowerEmail\": \"240414004@fellow.lpkia.ac.id\",\n  \"assetCode\": \"LAB-MM-305\",\n  \"quantity\": 2,\n  \"startDate\": \"2026-11-25\",\n  \"returnDate\": \"2026-11-28\",\n  \"purpose\": \"Presentasi tugas kelompok mata kuliah multimedia di ruang kelas\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "3. Angka: desimal, nol, negatif, melebihi batas",
+      "item": [
+        {
+          "name": "Equipment - stock desimal",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 400', function () { pm.response.to.have.status(400); });",
+                  "pm.test('Pesan memuat: stock', function () { pm.expect(JSON.stringify(pm.response.json().message)).to.include('stock'); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/equipment",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "equipment"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"assetCode\": \"LAB-MM-305\",\n  \"name\": \"Proyektor Epson EB-X06\",\n  \"category\": \"MULTIMEDIA\",\n  \"condition\": \"GOOD\",\n  \"stock\": 2.5,\n  \"location\": \"Lab Multimedia\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Equipment - stock negatif",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 400', function () { pm.response.to.have.status(400); });",
+                  "pm.test('Pesan memuat: stock', function () { pm.expect(JSON.stringify(pm.response.json().message)).to.include('stock'); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/equipment",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "equipment"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"assetCode\": \"LAB-MM-305\",\n  \"name\": \"Proyektor Epson EB-X06\",\n  \"category\": \"MULTIMEDIA\",\n  \"condition\": \"GOOD\",\n  \"stock\": -1,\n  \"location\": \"Lab Multimedia\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Equipment - stock lebih dari 50",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 400', function () { pm.response.to.have.status(400); });",
+                  "pm.test('Pesan memuat: stock', function () { pm.expect(JSON.stringify(pm.response.json().message)).to.include('stock'); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/equipment",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "equipment"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"assetCode\": \"LAB-MM-305\",\n  \"name\": \"Proyektor Epson EB-X06\",\n  \"category\": \"MULTIMEDIA\",\n  \"condition\": \"GOOD\",\n  \"stock\": 51,\n  \"location\": \"Lab Multimedia\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Loan - quantity nol",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 400', function () { pm.response.to.have.status(400); });",
+                  "pm.test('Pesan memuat: quantity', function () { pm.expect(JSON.stringify(pm.response.json().message)).to.include('quantity'); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/loan-requests",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "loan-requests"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"borrowerNim\": \"240414004\",\n  \"borrowerName\": \"Noval Nurhuda Wiratama\",\n  \"borrowerEmail\": \"240414004@fellow.lpkia.ac.id\",\n  \"assetCode\": \"LAB-MM-305\",\n  \"quantity\": 0,\n  \"startDate\": \"2026-11-25\",\n  \"returnDate\": \"2026-11-28\",\n  \"purpose\": \"Presentasi tugas kelompok mata kuliah multimedia di ruang kelas\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Loan - quantity lebih dari 3",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 400', function () { pm.response.to.have.status(400); });",
+                  "pm.test('Pesan memuat: quantity', function () { pm.expect(JSON.stringify(pm.response.json().message)).to.include('quantity'); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/loan-requests",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "loan-requests"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"borrowerNim\": \"240414004\",\n  \"borrowerName\": \"Noval Nurhuda Wiratama\",\n  \"borrowerEmail\": \"240414004@fellow.lpkia.ac.id\",\n  \"assetCode\": \"LAB-MM-305\",\n  \"quantity\": 4,\n  \"startDate\": \"2026-11-25\",\n  \"returnDate\": \"2026-11-28\",\n  \"purpose\": \"Presentasi tugas kelompok mata kuliah multimedia di ruang kelas\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Loan - quantity desimal",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 400', function () { pm.response.to.have.status(400); });",
+                  "pm.test('Pesan memuat: quantity', function () { pm.expect(JSON.stringify(pm.response.json().message)).to.include('quantity'); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/loan-requests",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "loan-requests"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"borrowerNim\": \"240414004\",\n  \"borrowerName\": \"Noval Nurhuda Wiratama\",\n  \"borrowerEmail\": \"240414004@fellow.lpkia.ac.id\",\n  \"assetCode\": \"LAB-MM-305\",\n  \"quantity\": 1.5,\n  \"startDate\": \"2026-11-25\",\n  \"returnDate\": \"2026-11-28\",\n  \"purpose\": \"Presentasi tugas kelompok mata kuliah multimedia di ruang kelas\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Equipment list - limit lebih dari 20",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 400', function () { pm.response.to.have.status(400); });",
+                  "pm.test('Pesan memuat: limit', function () { pm.expect(JSON.stringify(pm.response.json().message)).to.include('limit'); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/equipment?limit=21",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "equipment"
+              ],
+              "query": [
+                {
+                  "key": "limit",
+                  "value": "21"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Equipment list - page nol",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 400', function () { pm.response.to.have.status(400); });",
+                  "pm.test('Pesan memuat: page', function () { pm.expect(JSON.stringify(pm.response.json().message)).to.include('page'); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/equipment?page=0",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "equipment"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "0"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Equipment list - page bukan angka",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 400', function () { pm.response.to.have.status(400); });",
+                  "pm.test('Pesan memuat: page', function () { pm.expect(JSON.stringify(pm.response.json().message)).to.include('page'); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/equipment?page=abc",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "equipment"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "abc"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "4. Enum, email, field asing",
+      "item": [
+        {
+          "name": "Equipment - category di luar enum",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 400', function () { pm.response.to.have.status(400); });",
+                  "pm.test('Pesan memuat: category', function () { pm.expect(JSON.stringify(pm.response.json().message)).to.include('category'); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/equipment",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "equipment"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"assetCode\": \"LAB-MM-305\",\n  \"name\": \"Proyektor Epson EB-X06\",\n  \"category\": \"FURNITURE\",\n  \"condition\": \"GOOD\",\n  \"stock\": 5,\n  \"location\": \"Lab Multimedia\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Equipment - condition di luar enum",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 400', function () { pm.response.to.have.status(400); });",
+                  "pm.test('Pesan memuat: condition', function () { pm.expect(JSON.stringify(pm.response.json().message)).to.include('condition'); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/equipment",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "equipment"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"assetCode\": \"LAB-MM-305\",\n  \"name\": \"Proyektor Epson EB-X06\",\n  \"category\": \"MULTIMEDIA\",\n  \"condition\": \"BROKEN\",\n  \"stock\": 5,\n  \"location\": \"Lab Multimedia\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Equipment list - category di luar enum",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 400', function () { pm.response.to.have.status(400); });",
+                  "pm.test('Pesan memuat: category', function () { pm.expect(JSON.stringify(pm.response.json().message)).to.include('category'); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/equipment?category=FOO",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "equipment"
+              ],
+              "query": [
+                {
+                  "key": "category",
+                  "value": "FOO"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Loan - email tidak valid",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 400', function () { pm.response.to.have.status(400); });",
+                  "pm.test('Pesan memuat: borrowerEmail', function () { pm.expect(JSON.stringify(pm.response.json().message)).to.include('borrowerEmail'); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/loan-requests",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "loan-requests"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"borrowerNim\": \"240414004\",\n  \"borrowerName\": \"Noval Nurhuda Wiratama\",\n  \"borrowerEmail\": \"240414004@@fellow\",\n  \"assetCode\": \"LAB-MM-305\",\n  \"quantity\": 2,\n  \"startDate\": \"2026-11-25\",\n  \"returnDate\": \"2026-11-28\",\n  \"purpose\": \"Presentasi tugas kelompok mata kuliah multimedia di ruang kelas\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Loan - tanggal bukan ISO 8601",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 400', function () { pm.response.to.have.status(400); });",
+                  "pm.test('Pesan memuat: startDate', function () { pm.expect(JSON.stringify(pm.response.json().message)).to.include('startDate'); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/loan-requests",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "loan-requests"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"borrowerNim\": \"240414004\",\n  \"borrowerName\": \"Noval Nurhuda Wiratama\",\n  \"borrowerEmail\": \"240414004@fellow.lpkia.ac.id\",\n  \"assetCode\": \"LAB-MM-305\",\n  \"quantity\": 2,\n  \"startDate\": \"25/11/2026\",\n  \"returnDate\": \"2026-11-28\",\n  \"purpose\": \"Presentasi tugas kelompok mata kuliah multimedia di ruang kelas\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Loan - purpose terlalu pendek",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 400', function () { pm.response.to.have.status(400); });",
+                  "pm.test('Pesan memuat: purpose', function () { pm.expect(JSON.stringify(pm.response.json().message)).to.include('purpose'); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/loan-requests",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "loan-requests"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"borrowerNim\": \"240414004\",\n  \"borrowerName\": \"Noval Nurhuda Wiratama\",\n  \"borrowerEmail\": \"240414004@fellow.lpkia.ac.id\",\n  \"assetCode\": \"LAB-MM-305\",\n  \"quantity\": 2,\n  \"startDate\": \"2026-11-25\",\n  \"returnDate\": \"2026-11-28\",\n  \"purpose\": \"Praktikum\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Loan - field asing status dari client",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 400', function () { pm.response.to.have.status(400); });",
+                  "pm.test('Pesan memuat: property status should not exist', function () { pm.expect(JSON.stringify(pm.response.json().message)).to.include('property status should not exist'); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/loan-requests",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "loan-requests"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"borrowerNim\": \"240414004\",\n  \"borrowerName\": \"Noval Nurhuda Wiratama\",\n  \"borrowerEmail\": \"240414004@fellow.lpkia.ac.id\",\n  \"assetCode\": \"LAB-MM-305\",\n  \"quantity\": 2,\n  \"startDate\": \"2026-11-25\",\n  \"returnDate\": \"2026-11-28\",\n  \"purpose\": \"Presentasi tugas kelompok mata kuliah multimedia di ruang kelas\",\n  \"status\": \"APPROVED\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Loan - field asing createdAt dari client",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 400', function () { pm.response.to.have.status(400); });",
+                  "pm.test('Pesan memuat: property createdAt should not exist', function () { pm.expect(JSON.stringify(pm.response.json().message)).to.include('property createdAt should not exist'); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/loan-requests",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "loan-requests"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"borrowerNim\": \"240414004\",\n  \"borrowerName\": \"Noval Nurhuda Wiratama\",\n  \"borrowerEmail\": \"240414004@fellow.lpkia.ac.id\",\n  \"assetCode\": \"LAB-MM-305\",\n  \"quantity\": 2,\n  \"startDate\": \"2026-11-25\",\n  \"returnDate\": \"2026-11-28\",\n  \"purpose\": \"Presentasi tugas kelompok mata kuliah multimedia di ruang kelas\",\n  \"createdAt\": \"2020-01-01T00:00:00.000Z\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Loan - field asing id dari client",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 400', function () { pm.response.to.have.status(400); });",
+                  "pm.test('Pesan memuat: property id should not exist', function () { pm.expect(JSON.stringify(pm.response.json().message)).to.include('property id should not exist'); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/loan-requests",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "loan-requests"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"borrowerNim\": \"240414004\",\n  \"borrowerName\": \"Noval Nurhuda Wiratama\",\n  \"borrowerEmail\": \"240414004@fellow.lpkia.ac.id\",\n  \"assetCode\": \"LAB-MM-305\",\n  \"quantity\": 2,\n  \"startDate\": \"2026-11-25\",\n  \"returnDate\": \"2026-11-28\",\n  \"purpose\": \"Presentasi tugas kelompok mata kuliah multimedia di ruang kelas\",\n  \"id\": 99\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Equipment - field asing isAdmin",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 400', function () { pm.response.to.have.status(400); });",
+                  "pm.test('Pesan memuat: property isAdmin should not exist', function () { pm.expect(JSON.stringify(pm.response.json().message)).to.include('property isAdmin should not exist'); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/equipment",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "equipment"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"assetCode\": \"LAB-MM-305\",\n  \"name\": \"Proyektor Epson EB-X06\",\n  \"category\": \"MULTIMEDIA\",\n  \"condition\": \"GOOD\",\n  \"stock\": 5,\n  \"location\": \"Lab Multimedia\",\n  \"isAdmin\": true\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Equipment - field wajib hilang",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 400', function () { pm.response.to.have.status(400); });",
+                  "pm.test('Pesan memuat: name', function () { pm.expect(JSON.stringify(pm.response.json().message)).to.include('name'); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/equipment",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "equipment"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"assetCode\": \"LAB-MM-305\",\n  \"category\": \"MULTIMEDIA\",\n  \"condition\": \"GOOD\",\n  \"stock\": 5,\n  \"location\": \"Lab Multimedia\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "5. PATCH terbatas dan path param",
+      "item": [
+        {
+          "name": "Patch Loan - quantity (terlarang)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 400', function () { pm.response.to.have.status(400); });",
+                  "pm.test('Pesan memuat: property quantity should not exist', function () { pm.expect(JSON.stringify(pm.response.json().message)).to.include('property quantity should not exist'); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/loan-requests/1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "loan-requests",
+                "1"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"quantity\": 3\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Patch Loan - status (terlarang)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 400', function () { pm.response.to.have.status(400); });",
+                  "pm.test('Pesan memuat: property status should not exist', function () { pm.expect(JSON.stringify(pm.response.json().message)).to.include('property status should not exist'); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/loan-requests/1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "loan-requests",
+                "1"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"APPROVED\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Patch Loan - purpose terlalu pendek",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 400', function () { pm.response.to.have.status(400); });",
+                  "pm.test('Pesan memuat: purpose', function () { pm.expect(JSON.stringify(pm.response.json().message)).to.include('purpose'); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/loan-requests/1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "loan-requests",
+                "1"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"purpose\": \"Singkat\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Patch Equipment - assetCode (terlarang)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 400', function () { pm.response.to.have.status(400); });",
+                  "pm.test('Pesan memuat: property assetCode should not exist', function () { pm.expect(JSON.stringify(pm.response.json().message)).to.include('property assetCode should not exist'); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/equipment/1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "equipment",
+                "1"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"assetCode\": \"LAB-MM-999\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Patch Equipment - stock lebih dari 50",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 400', function () { pm.response.to.have.status(400); });",
+                  "pm.test('Pesan memuat: stock', function () { pm.expect(JSON.stringify(pm.response.json().message)).to.include('stock'); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/equipment/1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "equipment",
+                "1"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"stock\": 99\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Detail Equipment - id bukan angka",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 400', function () { pm.response.to.have.status(400); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/equipment/abc",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "equipment",
+                "abc"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Detail Loan Request - id bukan angka",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 400', function () { pm.response.to.have.status(400); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/loan-requests/abc",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "loan-requests",
+                "abc"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "6. Aturan lintas-field (di luar cakupan UTS)",
+      "item": [
+        {
+          "name": "Loan - returnDate sebelum startDate (belum divalidasi, lihat PRD BR-04)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 201', function () { pm.response.to.have.status(201); });",
+                  "pm.test('status dan createdAt dibuat sistem', function () { var d = pm.response.json().data; pm.expect(d.status).to.eql('PENDING'); pm.expect(d.createdAt).to.be.a('string'); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/loan-requests",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "loan-requests"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"borrowerNim\": \"240414004\",\n  \"borrowerName\": \"Noval Nurhuda Wiratama\",\n  \"borrowerEmail\": \"240414004@fellow.lpkia.ac.id\",\n  \"assetCode\": \"LAB-MM-305\",\n  \"quantity\": 2,\n  \"startDate\": \"2026-11-28\",\n  \"returnDate\": \"2026-11-25\",\n  \"purpose\": \"Presentasi tugas kelompok mata kuliah multimedia di ruang kelas\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:3000/api"
+    }
+  ]
+}
